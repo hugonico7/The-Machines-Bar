@@ -10,6 +10,14 @@ namespace ApiRest.Entities
     [Index("Username", Name = "username", IsUnique = true)]
     public partial class Usuario
     {
+        public Usuario(String nombre,String apellidos,String nss,String username,String password)
+        {
+            Nombre = nombre;
+            Apellidos = apellidos;
+            Nss = nss;
+            Username = username;
+            Password = password;
+        }
         [Key]
         [Column("id", TypeName = "int(50)")]
         public int Id { get; set; }
@@ -28,12 +36,7 @@ namespace ApiRest.Entities
         [Column("password")]
         [StringLength(200)]
         public string Password { get; set; } = null!;
+        
 
-        [InverseProperty("IdNavigation")]
-        public virtual Camarero Camarero { get; set; } = null!;
-        [InverseProperty("IdNavigation")]
-        public virtual Cocinero Cocinero { get; set; } = null!;
-        [InverseProperty("IdNavigation")]
-        public virtual Gerente Gerente { get; set; } = null!;
     }
 }

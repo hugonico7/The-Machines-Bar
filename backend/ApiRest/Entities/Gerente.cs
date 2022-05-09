@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace ApiRest.Entities
 {
     [Table("gerente")]
-    public partial class Gerente
+    public partial class Gerente : Usuario
     {
-        [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
+        public Gerente(String nombre,String apellidos,String nss,String username,String password)
+            :base(nombre, apellidos, nss, username, password)
+        {
 
-        [ForeignKey("Id")]
-        [InverseProperty("Gerente")]
-        public virtual Usuario IdNavigation { get; set; } = null!;
+        }
+        
     }
 }

@@ -41,104 +41,39 @@ namespace ApiRest.Context
             modelBuilder.UseCollation("utf8mb4_general_ci")
                 .HasCharSet("utf8mb4");
 
-            modelBuilder.Entity<Camarero>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+            var users = modelBuilder.Entity<Usuario>();
+            users.ToTable("Usuario");
+            users.HasKey(u => u.Id);
+            users.HasAlternateKey(u => u.Username);
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Camarero)
-                    .HasForeignKey<Camarero>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_camareroUser");
-            });
+            var camarero = modelBuilder.Entity<Camarero>();
+            camarero.ToTable("Camarero");
 
-            modelBuilder.Entity<Cocinero>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+            var cocinero = modelBuilder.Entity<Cocinero>();
+            cocinero.ToTable("Cocinero");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Cocinero)
-                    .HasForeignKey<Cocinero>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_cocineroUser");
-            });
+            var gerente = modelBuilder.Entity<Gerente>();
+            gerente.ToTable("Gerente");
 
-            modelBuilder.Entity<Comanda>(entity =>
-            {
-                entity.HasOne(d => d.IdCamareroNavigation)
-                    .WithMany(p => p.Comanda)
-                    .HasForeignKey(d => d.IdCamarero)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_camarerocomanda");
+            var categoria = modelBuilder.Entity<Categoria>();
+            categoria.ToTable("Categoria");
+            categoria.HasKey(c => c.Id);
 
-                entity.HasOne(d => d.IdCocineroNavigation)
-                    .WithMany(p => p.Comanda)
-                    .HasForeignKey(d => d.IdCocinero)
-                    .HasConstraintName("fk_cocinerocomanda");
+            var producto = modelBuilder.Entity<Producto>();
+            producto.ToTable("Producto");
+            producto.HasKey(c => c.Id);
 
-                entity.HasOne(d => d.IdPedidoNavigation)
-                    .WithMany(p => p.Comanda)
-                    .HasForeignKey(d => d.IdPedido)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_pedidocomanda");
+            var reserva = modelBuilder.Entity<Reserva>();
+            reserva.ToTable("Reserva");
+            reserva.HasKey(c => c.Id);
 
-                entity.HasOne(d => d.IdProductoNavigation)
-                    .WithMany(p => p.Comanda)
-                    .HasForeignKey(d => d.IdProducto)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_productocomanda");
-            });
+            var comanda = modelBuilder.Entity<Comanda>();
+            comanda.ToTable("Comanda");
+            comanda.HasKey(c => c.Id);
 
-            modelBuilder.Entity<Gerente>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Gerente)
-                    .HasForeignKey<Gerente>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_gerenteUser");
-            });
-
-            modelBuilder.Entity<Mesa>(entity =>
-            {
-                entity.HasMany(d => d.IdReservas)
-                    .WithMany(p => p.IdMesas)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Mesareserva",
-                        l => l.HasOne<Reserva>().WithMany().HasForeignKey("IdReserva").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_reservamesa"),
-                        r => r.HasOne<Mesa>().WithMany().HasForeignKey("IdMesa").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_mesareserva"),
-                        j =>
-                        {
-                            j.HasKey("IdMesa", "IdReserva").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                            j.ToTable("mesareserva");
-
-                            j.HasIndex(new[] { "IdReserva" }, "fk_reservamesa");
-
-                            j.IndexerProperty<int>("IdMesa").HasColumnType("int(50)").HasColumnName("id_mesa");
-
-                            j.IndexerProperty<int>("IdReserva").HasColumnType("int(50)").HasColumnName("id_reserva");
-                        });
-            });
-
-            modelBuilder.Entity<Pedido>(entity =>
-            {
-                entity.HasOne(d => d.IdMesaNavigation)
-                    .WithMany(p => p.Pedidos)
-                    .HasForeignKey(d => d.IdMesa)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_idmesa");
-            });
-
-            modelBuilder.Entity<Producto>(entity =>
-            {
-                entity.HasOne(d => d.IdCatNavigation)
-                    .WithMany(p => p.Productos)
-                    .HasForeignKey(d => d.IdCat)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_catProd");
-            });
+            var pedido = modelBuilder.Entity<Pedido>();
+            pedido.ToTable("Pedido");
+            pedido.HasKey(c => c.Id);
 
             OnModelCreatingPartial(modelBuilder);
         }

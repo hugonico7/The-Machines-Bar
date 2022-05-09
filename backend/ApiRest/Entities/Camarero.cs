@@ -7,20 +7,14 @@ using Microsoft.EntityFrameworkCore;
 namespace ApiRest.Entities
 {
     [Table("camarero")]
-    public partial class Camarero
+    public partial class Camarero : Usuario
     {
-        public Camarero()
+        public Camarero(String nombre, String apellidos, String nss, String username, String password)
+            : base(nombre, apellidos, nss, username, password)
         {
             Comanda = new HashSet<Comanda>();
         }
-
-        [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
-
-        [ForeignKey("Id")]
-        [InverseProperty("Camarero")]
-        public virtual Usuario IdNavigation { get; set; } = null!;
+        
         [InverseProperty("IdCamareroNavigation")]
         public virtual ICollection<Comanda> Comanda { get; set; }
     }
