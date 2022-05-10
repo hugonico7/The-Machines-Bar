@@ -36,7 +36,7 @@ namespace ApiRest.Entities
         [Column("password")]
         [StringLength(200)]
         public string Password { get; set; } = null!;
-        
+
 
     }
 }

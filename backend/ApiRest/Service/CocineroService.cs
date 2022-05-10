@@ -12,31 +12,36 @@ public class CocineroService
         _cocineroRepository = cocineroRepository;
     }
 
-    public bool DeleteById(int id)
+    public async Task<bool> DeleteById(int id)
     {
-        _cocineroRepository.Delete(id);
-        return true;
+        try
+        {
+            await _cocineroRepository.Delete(id);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
-    public IList<Cocinero> FindAll()
+    public async Task<IList<Cocinero>> FindAll()
     {
-        return _cocineroRepository.GetAll().Result;
+        return await _cocineroRepository.GetAll();
     }
 
-    public Cocinero? FindById(int id)
+    public async Task<Cocinero?> FindById(int id)
     {
-        return _cocineroRepository.GetById(id).Result;
+        return await _cocineroRepository.GetById(id);
     }
 
-    public Cocinero Save(Cocinero cocinero)
+    public async Task<Cocinero> Save(Cocinero cocinero)
     {
-        Cocinero cocineroUp = _cocineroRepository.Add(cocinero).Result;
-        return cocineroUp;
+        return await _cocineroRepository.Add(cocinero);
     }
 
-    public Cocinero Update(Cocinero cocinero)
+    public async Task<Cocinero> Update(Cocinero cocinero)
     {
-        Cocinero cocineroUp = _cocineroRepository.Update(cocinero).Result;
-        return cocineroUp;
+        return await _cocineroRepository.Update(cocinero);
     }
 }

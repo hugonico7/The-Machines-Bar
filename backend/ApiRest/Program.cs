@@ -1,4 +1,5 @@
 using ApiRest.Context;
+using ApiRest.Entities;
 using ApiRest.Mapper;
 using ApiRest.Repository;
 using ApiRest.Service;
@@ -32,7 +33,13 @@ builder.Services.AddScoped<GerenteService>();
 builder.Services.AddAutoMapper(typeof(UsuarioMapper),
     typeof(CamareroMapper),
     typeof(CocineroMapper),
-    typeof(GerenteMapper));
+    typeof(GerenteMapper),
+    typeof(CategoriaMapper),
+    typeof(ComandaMapper),
+    typeof(MesaMapper),
+    typeof(PedidoMapper),
+    typeof(ProductoMapper),
+    typeof(ReservaMapper));
 
 builder.Services.AddControllers();
 

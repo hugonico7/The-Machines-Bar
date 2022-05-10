@@ -9,9 +9,9 @@ namespace ApiRest.Entities
     [Table("categoria")]
     public partial class Categoria
     {
-        public Categoria()
+        public Categoria(string nombre)
         {
-            Productos = new HashSet<Producto>();
+            Nombre = nombre;
         }
 
         [Key]
@@ -19,7 +19,7 @@ namespace ApiRest.Entities
         public int Id { get; set; }
         [Column("nombre")]
         [StringLength(50)]
-        public string Nombre { get; set; } = null!;
+        public string Nombre { get; set; }
 
         [InverseProperty("IdCatNavigation")]
         public virtual ICollection<Producto> Productos { get; set; }

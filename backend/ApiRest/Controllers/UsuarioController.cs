@@ -20,55 +20,51 @@ namespace ApiRest.Controller;
         }
         
         [HttpGet]
-        public IList<UsuarioDTO> GetAllUsers()
+        public async Task<IList<UsuarioDTO>> GetAllUsers()
         {
-            IList<UsuarioDTO> usersDTO = new List<UsuarioDTO>();
-            var users = _usuarioService.FindAll();
-            foreach (Usuario u in users)
-            {
-                usersDTO.Add(_mapper.Map<UsuarioDTO>(u));
-            }
-            return usersDTO;
+            var users = await _usuarioService.FindAll();
+            return users.Select(u => _mapper.Map<UsuarioDTO>(u)).ToList();
         }
         
         [HttpGet("{id}")]
-        public UsuarioDTO GetUser(int id)
+        public async Task<UsuarioDTO?> GetUser(int id)
         {
-            var user = _usuarioService.FindById(id);
-            if (user is null)
-            {
-                return null;
-            } 
-            return _mapper.Map<UsuarioDTO>(user);
+            var user = await _usuarioService.FindById(id);
+            return user is null ? null : _mapper.Map<UsuarioDTO>(user);
         }
         
         [HttpPost]
-        public UsuarioDTO CreateUser(UsuarioDTO userDto)
+        public async Task<UsuarioDTO> CreateUser(UsuarioDTO userDto)
         {
             Usuario user = _mapper.Map<Usuario>(userDto);
-            user = _usuarioService.Save(user);
+            user = await _usuarioService.Save(user);
           
             return _mapper.Map<UsuarioDTO>(user);
         }
         
         [HttpPut("{id}")]
-        public UsuarioDTO UpdateUser(long id, UsuarioDTO userDto)
+        public async Task<IActionResult> UpdateUser(long id, UsuarioDTO userDto)
         {
-            var user = _mapper.Map<Usuario>(userDto);
-            if (id != user.Id)
+            try
             {
-                return null;
+                var user = _mapper.Map<Usuario>(userDto);
+                if (id != user.Id)
+                {
+                    return BadRequest("Las id no coinciden");
+                }
+                await _usuarioService.Update(user);
+                return Ok("Usuario actualizado");
             }
- 
-            user = _usuarioService.Update(user);
-
-            return _mapper.Map<UsuarioDTO>(user);
+            catch (Exception e)
+            {
+               return BadRequest(e.Message);
+            }
         }
         
         [HttpDelete("{id}")]
-        public bool DeleteUser(int id)
+        public async Task<bool> DeleteUser(int id)
         {
-            var deleted = _usuarioService.DeleteById(id);
+            var deleted = await _usuarioService.DeleteById(id);
             return deleted;
         }
     }

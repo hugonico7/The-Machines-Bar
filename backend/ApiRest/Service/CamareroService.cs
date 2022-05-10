@@ -12,31 +12,40 @@ public class CamareroService
         _camareroRepository = camareroRepository;
     }
 
-    public bool DeleteById(int id)
+    public async Task<bool> DeleteById(int id)
     {
-        _camareroRepository.Delete(id);
-        return true;
+        try
+        {
+            await _camareroRepository.Delete(id);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+       
+          
     }
 
-    public IList<Camarero> FindAll()
+    public async Task<IList<Camarero>> FindAll()
     {
-        return _camareroRepository.GetAll().Result;
+        return await _camareroRepository.GetAll();
     }
 
-    public Camarero? FindById(int id)
+    public async Task<Camarero?> FindById(int id)
     {
-        return _camareroRepository.GetById(id).Result;
+        return await _camareroRepository.GetById(id);
     }
 
-    public Camarero Save(Camarero camarero)
+    public async Task<Camarero> Save(Camarero camarero)
     {
-        Camarero camareroUp = _camareroRepository.Add(camarero).Result;
+        Camarero camareroUp = await _camareroRepository.Add(camarero);
         return camareroUp;
     }
 
-    public Camarero Update(Camarero camarero)
+    public async Task<Camarero> Update(Camarero camarero)
     {
-        Camarero camareroUp = _camareroRepository.Update(camarero).Result;
+        Camarero camareroUp = await _camareroRepository.Update(camarero);
         return camareroUp;
     }
 }

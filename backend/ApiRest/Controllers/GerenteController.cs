@@ -20,10 +20,10 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
-    public IList<GerenteDTO> GetAll() 
+    public async Task<IList<GerenteDTO>> GetAll() 
     { 
         IList<GerenteDTO> gerenteList = new List<GerenteDTO>(); 
-        var gerentes = _gerenteService.FindAll(); 
+        var gerentes = await _gerenteService.FindAll(); 
         foreach (Gerente g in gerentes) 
         { 
             gerenteList.Add(_mapper.Map<GerenteDTO>(g));
@@ -32,9 +32,9 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpGet("{id}")]
-    public GerenteDTO Get(int id)
+    public async Task<GerenteDTO> Get(int id)
     {
-        var gerente = _gerenteService.FindById(id); 
+        var gerente = await _gerenteService.FindById(id); 
         if (gerente is null) 
         { 
             return null;
@@ -43,29 +43,43 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpPost]
-    public GerenteDTO Create(GerenteDTO gerenteDto) 
-    { 
-        Gerente gerente = _mapper.Map<Gerente>(gerenteDto); 
-        gerente = _gerenteService.Save(gerente); 
-        return _mapper.Map<GerenteDTO>(gerente);
+    public async Task<IActionResult> Create(GerenteDTO gerenteDto) 
+    {
+        try
+        {
+            Gerente gerente = _mapper.Map<Gerente>(gerenteDto); 
+            await _gerenteService.Save(gerente);
+            return Ok("Gerente creado");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
             
     [HttpPut("{id}")] 
-    public GerenteDTO Update(long id, GerenteDTO gerenteDto)
-    { 
-        var gerente = _mapper.Map<Gerente>(gerenteDto); 
-        if (id != gerente.Id) 
-        { 
-            return null;
-        } 
-        gerente = _gerenteService.Update(gerente);
-        return _mapper.Map<GerenteDTO>(gerente);
+    public async Task<IActionResult> Update(long id, GerenteDTO gerenteDto)
+    {
+        try
+        {
+            var gerente = _mapper.Map<Gerente>(gerenteDto); 
+            if (id != gerente.Id) 
+            { 
+                return null;
+            } 
+            await _gerenteService.Update(gerente);
+            return Ok("Gerente creado");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
             
     [HttpDelete("{id}")] 
-    public bool Delete(int id) 
+    public async Task<bool> Delete(int id) 
     { 
-        var deleted = _gerenteService.DeleteById(id); 
+        var deleted = await _gerenteService.DeleteById(id); 
         return deleted;
     }
 }

@@ -12,31 +12,38 @@ public class GerenteService
         _gerenteRepository = gerenteRepository;
     }
 
-    public bool DeleteById(int id)
+    public async Task<bool> DeleteById(int id)
     {
-        _gerenteRepository.Delete(id);
-        return true;
+        try
+        {
+            await _gerenteRepository.Delete(id);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
-    public IList<Gerente> FindAll()
+    public async Task<IList<Gerente>> FindAll()
     {
-        return _gerenteRepository.GetAll().Result;
+        return await _gerenteRepository.GetAll();
     }
 
-    public Gerente? FindById(int id)
+    public async Task<Gerente?> FindById(int id)
     {
-        return _gerenteRepository.GetById(id).Result;
+        return await _gerenteRepository.GetById(id);
     }
 
-    public Gerente Save(Gerente gerente)
+    public async Task<Gerente> Save(Gerente gerente)
     {
-        Gerente gerenteUp = _gerenteRepository.Add(gerente).Result;
+        Gerente gerenteUp = await _gerenteRepository.Add(gerente);
         return gerenteUp;
     }
 
-    public Gerente Update(Gerente gerente)
+    public async Task<Gerente> Update(Gerente gerente)
     {
-        Gerente gerenteUp = _gerenteRepository.Update(gerente).Result;
+        Gerente gerenteUp = await _gerenteRepository.Update(gerente);
         return gerenteUp;
     }
 }

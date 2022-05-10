@@ -20,10 +20,10 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
-    public IList<CocineroDTO> GetAll() 
+    public async Task<List<CocineroDTO>> GetAll() 
     { 
-        IList<CocineroDTO> cocineroList = new List<CocineroDTO>(); 
-        var cocineros = _cocineroService.FindAll(); 
+        List<CocineroDTO> cocineroList = new List<CocineroDTO>(); 
+        var cocineros = await _cocineroService.FindAll(); 
         foreach (Cocinero c in cocineros) 
         { 
             cocineroList.Add(_mapper.Map<CocineroDTO>(c));
@@ -43,29 +43,44 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpPost]
-    public CocineroDTO Create(CocineroDTO cocineroDto) 
-    { 
-        Cocinero cocinero = _mapper.Map<Cocinero>(cocineroDto); 
-        cocinero = _cocineroService.Save(cocinero); 
-        return _mapper.Map<CocineroDTO>(cocinero);
+    public async Task<IActionResult> Create(CocineroDTO cocineroDto) 
+    {
+        try
+        {
+            Cocinero cocinero = _mapper.Map<Cocinero>(cocineroDto); 
+            await _cocineroService.Save(cocinero);
+            return Ok("Cocinero creado");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
             
     [HttpPut("{id}")] 
-    public CocineroDTO Update(long id, CocineroDTO cocineroDto)
-    { 
-        var cocinero = _mapper.Map<Cocinero>(cocineroDto); 
-        if (id != cocinero.Id) 
-        { 
-            return null;
-        } 
-        cocinero = _cocineroService.Update(cocinero);
-        return _mapper.Map<CocineroDTO>(cocinero);
+    public async Task<IActionResult> Update(long id, CocineroDTO cocineroDto)
+    {
+        try
+        {
+            var cocinero = _mapper.Map<Cocinero>(cocineroDto); 
+            if (id != cocinero.Id)
+            {
+                return BadRequest("No coincide el ID a actualizar con el insertado");
+            } 
+            await _cocineroService.Update(cocinero);
+            return Ok("Cocinero actualizado");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
             
     [HttpDelete("{id}")] 
-    public bool Delete(int id) 
-    { 
-        var deleted = _cocineroService.DeleteById(id); 
+    public async Task<bool> Delete(int id) 
+    {
+        var deleted = await _cocineroService.DeleteById(id); 
         return deleted;
     }
 }

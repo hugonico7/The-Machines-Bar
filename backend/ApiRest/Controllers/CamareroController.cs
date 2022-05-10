@@ -20,10 +20,10 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
-    public IList<CamareroDTO> GetAll() 
+    public async Task<IList<CamareroDTO>> GetAll() 
     { 
         IList<CamareroDTO> camareroList = new List<CamareroDTO>(); 
-        var camareros = _camareroService.FindAll(); 
+        var camareros = await _camareroService.FindAll(); 
         foreach (Camarero c in camareros) 
         { 
             camareroList.Add(_mapper.Map<CamareroDTO>(c));
@@ -32,9 +32,9 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpGet("{id}")]
-    public CamareroDTO Get(int id)
+    public async Task<CamareroDTO> Get(int id)
     {
-        var camarero = _camareroService.FindById(id); 
+        var camarero =  await _camareroService.FindById(id); 
         if (camarero is null) 
         { 
             return null;
@@ -43,29 +43,51 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpPost]
-    public CamareroDTO Create(CamareroDTO camareroDto) 
-    { 
-        Camarero camarero = _mapper.Map<Camarero>(camareroDto); 
-        camarero = _camareroService.Save(camarero); 
-        return _mapper.Map<CamareroDTO>(camarero);
+    public async Task<IActionResult> Create(CamareroDTO camareroDto) 
+    {
+        try
+        {
+            Camarero camarero = _mapper.Map<Camarero>(camareroDto); 
+            await _camareroService.Save(camarero);
+            return Ok("Camarero creado correctamente");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
             
     [HttpPut("{id}")] 
-    public CamareroDTO Update(int id, CamareroDTO camareroDto)
-    { 
-        var camarero = _mapper.Map<Camarero>(camareroDto); 
-        if (id != camarero.Id) 
-        { 
-            return null;
-        } 
-        camarero = _camareroService.Update(camarero);
-        return _mapper.Map<CamareroDTO>(camarero);
+    public async Task<IActionResult> Update(int id, CamareroDTO camareroDto)
+    {
+        try
+        {
+            var camarero = _mapper.Map<Camarero>(camareroDto); 
+            if (id != camarero.Id) 
+            { 
+                return null;
+            } 
+            await _camareroService.Update(camarero);
+            return Ok("Camarero actualizado");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
             
     [HttpDelete("{id}")] 
-    public bool Delete(int id) 
+    public async Task<IActionResult> Delete(int id) 
     { 
-        var deleted = _camareroService.DeleteById(id); 
-        return deleted;
+        bool deleted = await _camareroService.DeleteById(id);
+        if (deleted)
+        {
+            return Ok("Camarero borrado");
+        }
+        else
+        {
+            return BadRequest("Camarero no borrado");
+        }
     }
 }

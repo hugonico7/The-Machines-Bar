@@ -12,31 +12,38 @@ public class UsuarioService
         UserRepository = userRepository;
     }
 
-    public bool DeleteById(int id)
+    public async Task<bool> DeleteById(int id)
     {
-        UserRepository.Delete(id);
-        return true;
+        try
+        {
+            await UserRepository.Delete(id);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
-    public IList<Usuario> FindAll()
+    public async Task<IList<Usuario>> FindAll()
     {
-        return UserRepository.GetAll().Result;
+        return await UserRepository.GetAll();
     }
 
-    public Usuario? FindById(int id)
+    public async Task<Usuario?> FindById(int id)
     {
-        return UserRepository.GetById(id).Result;
+        return await UserRepository.GetById(id);
     }
 
-    public Usuario Save(Usuario usuario)
+    public async Task<Usuario> Save(Usuario usuario)
     {
-        Usuario usuarioUp = UserRepository.Add(usuario).Result;
+        Usuario usuarioUp = await UserRepository.Add(usuario);
         return usuarioUp;
     }
 
-    public Usuario Update(Usuario usuario)
+    public async Task<Usuario> Update(Usuario usuario)
     {
-        Usuario usuarioUp = UserRepository.Update(usuario).Result;
+        var usuarioUp = await UserRepository.Update(usuario);
         return usuarioUp;
     }
 }
