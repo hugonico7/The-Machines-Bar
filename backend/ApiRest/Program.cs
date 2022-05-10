@@ -22,12 +22,24 @@ builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<CamareroRepository>();
 builder.Services.AddScoped<CocineroRepository>();
 builder.Services.AddScoped<GerenteRepository>();
+builder.Services.AddScoped<CategoriaRepository>();
+builder.Services.AddScoped<ComandaRepository>();
+builder.Services.AddScoped<MesaRepository>();
+builder.Services.AddScoped<PedidoRepository>();
+builder.Services.AddScoped<ProductoRepository>();
+builder.Services.AddScoped<ReservaRepository>();
 
 // Add Services
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<CamareroService>();
 builder.Services.AddScoped<CocineroService>();
 builder.Services.AddScoped<GerenteService>();
+builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<ComandaService>();
+builder.Services.AddScoped<MesaService>();
+builder.Services.AddScoped<PedidoService>();
+builder.Services.AddScoped<ProductoService>();
+builder.Services.AddScoped<ReservaService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(UsuarioMapper),
