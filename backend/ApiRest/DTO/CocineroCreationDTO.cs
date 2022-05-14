@@ -1,6 +1,6 @@
 ﻿namespace ApiRest.DTO;
 
-public class CocineroCreationDTO : UsuarioDTO
+public class CocineroCreationDTO : UsuarioCreationDTO
 {
     
 }

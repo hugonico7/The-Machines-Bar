@@ -1,6 +1,6 @@
 ﻿namespace ApiRest.DTO;
 
-public class GerenteDTO : UsuarioDTO
+public class GerenteDTO : UsuarioCreationDTO
 {
     
 }

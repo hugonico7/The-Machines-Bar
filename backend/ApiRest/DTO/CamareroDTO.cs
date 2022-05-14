@@ -2,7 +2,7 @@
 
 namespace ApiRest.DTO;
 
-public class CamareroDTO : UsuarioDTO
+public class CamareroDTO : UsuarioCreationDTO
 {
     //public virtual ICollection<ComandaCreationDTO> Comanda { get; set; }
 }

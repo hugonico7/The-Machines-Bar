@@ -9,8 +9,9 @@ namespace ApiRest.Entities
     [Table("camarero")]
     public partial class Camarero : Usuario
     {
+        private static String Rol = "camarero";
         public Camarero(String nombre, String apellidos, String nss, String username, String password)
-            : base(nombre, apellidos, nss, username, password)
+            : base(nombre, apellidos, nss, username, password,Rol)
         {
             Comanda = new HashSet<Comanda>();
         }

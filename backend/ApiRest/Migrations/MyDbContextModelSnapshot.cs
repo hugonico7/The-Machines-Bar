@@ -220,6 +220,12 @@ namespace ApiRest.Migrations
                         .HasColumnType("varchar(200)")
                         .HasColumnName("password");
 
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("rol");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)

@@ -10,5 +10,7 @@ public class UsuarioMapper : Profile
     {
         CreateMap<UsuarioDTO, Usuario>();
         CreateMap<Usuario, UsuarioDTO>();
+        CreateMap<UsuarioCreationDTO, Usuario>();
+        CreateMap<Usuario, UsuarioCreationDTO>();
     }
 }

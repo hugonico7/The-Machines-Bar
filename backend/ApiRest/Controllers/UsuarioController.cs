@@ -12,10 +12,12 @@ namespace ApiRest.Controller;
     {
         private readonly UsuarioService _usuarioService;
         private readonly IMapper _mapper;
+        private readonly CamareroService _camareroService;
         
-        public UsuarioController(UsuarioService usuarioService, IMapper mapper)
+        public UsuarioController(UsuarioService usuarioService, IMapper mapper, CamareroService camareroService)
         {
             _usuarioService = usuarioService;
+            _camareroService = camareroService;
             _mapper = mapper;
         }
         
@@ -34,7 +36,7 @@ namespace ApiRest.Controller;
         }
         
         [HttpPost]
-        public async Task<UsuarioDTO> CreateUser(UsuarioDTO userDto)
+        public async Task<UsuarioDTO> CreateUser(UsuarioCreationDTO userDto)
         {
             Usuario user = _mapper.Map<Usuario>(userDto);
             user = await _usuarioService.Save(user);
@@ -67,4 +69,5 @@ namespace ApiRest.Controller;
             var deleted = await _usuarioService.DeleteById(id);
             return deleted;
         }
+        
     }

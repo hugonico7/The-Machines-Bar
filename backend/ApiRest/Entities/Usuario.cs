@@ -10,13 +10,14 @@ namespace ApiRest.Entities
     [Index("Username", Name = "username", IsUnique = true)]
     public partial class Usuario
     {
-        public Usuario(String nombre,String apellidos,String nss,String username,String password)
+        public Usuario(String nombre,String apellidos,String nss,String username,String password,String rol)
         {
             Nombre = nombre;
             Apellidos = apellidos;
             Nss = nss;
             Username = username;
             Password = password;
+            Rol = rol;
         }
         [Key]
         [Column("id", TypeName = "int(50)")]
@@ -36,6 +37,9 @@ namespace ApiRest.Entities
         [Column("password")]
         [StringLength(200)]
         public string Password { get; set; } = null!;
+        [Column("rol")]
+        [StringLength(200)]
+        public string Rol { get; set; } = null!;
 
 
     }
