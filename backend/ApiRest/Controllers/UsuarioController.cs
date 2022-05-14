@@ -3,6 +3,10 @@ using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ApiRest.Controller;
 
@@ -12,13 +16,13 @@ namespace ApiRest.Controller;
     {
         private readonly UsuarioService _usuarioService;
         private readonly IMapper _mapper;
-        private readonly CamareroService _camareroService;
+        private readonly IConfiguration _config;
         
-        public UsuarioController(UsuarioService usuarioService, IMapper mapper, CamareroService camareroService)
+        public UsuarioController(UsuarioService usuarioService, IMapper mapper, IConfiguration configuration)
         {
             _usuarioService = usuarioService;
-            _camareroService = camareroService;
             _mapper = mapper;
+            _config = configuration;
         }
         
         [HttpGet]
@@ -70,4 +74,50 @@ namespace ApiRest.Controller;
             return deleted;
         }
         
+
+        [HttpPost]
+        [Route("/Login")]
+        public async Task<IResult> Login(UsuarioLoginDTO user)
+        {
+        // var usuario = _mapper.Map<Usuario>(user);
+
+        string I = _config.GetSection("Jwt").GetSection("Issuer").Value;
+
+            var users = await _usuarioService.FindAll();
+
+             Usuario userlogged = null;
+
+           foreach(var usu in users)
+           {
+               if(usu.Username == user.Username && usu.Password == user.Password)
+               {
+                 userlogged = usu;
+               }
+             
+           }
+
+           var claims = new[]
+           {
+               new Claim(ClaimTypes.NameIdentifier, userlogged.Username),
+               new Claim(ClaimTypes.Role, userlogged.Rol)
+           };
+
+            var token = new JwtSecurityToken(
+                _config.GetSection("Jwt").GetSection("Issuer").Value,
+                _config.GetSection("Jwt").GetSection("Audience").Value,
+                claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                notBefore: DateTime.UtcNow,
+                signingCredentials: new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt").GetSection("key").Value ?? string.Empty)),
+                SecurityAlgorithms.HmacSha512)
+
+             );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Results.Ok(tokenString);
+
+    }
+
     }

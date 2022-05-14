@@ -6,7 +6,10 @@ namespace ApiRest.Controller;
 
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 [Route("comanda")]
 [ApiController]
@@ -22,6 +25,7 @@ public class ComandaController : Controller
     }
     
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
     public async Task<IList<ComandaDTO>> GetAll() 
     {
         var comandas = await _comandaService.FindAll();
