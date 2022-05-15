@@ -47,7 +47,7 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<UsuarioDTO> CreateUser(UsuarioCreationDTO userDto)
     {
-        Usuario user = _mapper.Map<Usuario>(userDto);
+        var user = _mapper.Map<Usuario>(userDto);
         user = await _usuarioService.Save(user);
 
         return _mapper.Map<UsuarioDTO>(user);
@@ -88,21 +88,29 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     {
         var userlogged = await _usuarioService.GetUserByUsername(user.Username);
 
-        var claims = new[]
+        var comprobar = BCrypt.Net.BCrypt.Verify(user.Password, userlogged!.Password);
+
+        if (comprobar)
         {
-            new Claim(ClaimTypes.NameIdentifier, userlogged?.Username!), new Claim(ClaimTypes.Role, userlogged?.Rol!)
-        };
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userlogged?.Username!),
+                new Claim(ClaimTypes.Role, userlogged?.Rol!)
+            };
 
-        var token = new JwtSecurityToken(_config.GetSection("Jwt").GetSection("Issuer").Value,
-            _config.GetSection("Jwt").GetSection("Audience").Value, claims, expires: DateTime.UtcNow.AddHours(1),
-            notBefore: DateTime.UtcNow,
-            signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_config.GetSection("Jwt").GetSection("key").Value ?? string.Empty)),
-                SecurityAlgorithms.HmacSha512));
+            var token = new JwtSecurityToken(_config.GetSection("Jwt").GetSection("Issuer").Value,
+                _config.GetSection("Jwt").GetSection("Audience").Value, claims, expires: DateTime.UtcNow.AddHours(1),
+                notBefore: DateTime.UtcNow,
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(_config.GetSection("Jwt").GetSection("key").Value ?? string.Empty)),
+                    SecurityAlgorithms.HmacSha512));
 
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-        return Results.Ok(tokenString);
+            return Results.Ok(tokenString);
+        }
+        else
+            return Results.BadRequest("Login fail");
     }
 }

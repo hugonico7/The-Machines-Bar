@@ -24,26 +24,17 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IList<CamareroDTO>> GetAll() 
-    { 
-        IList<CamareroDTO> camareroList = new List<CamareroDTO>(); 
-        var camareros = await _camareroService.FindAll(); 
-        foreach (Camarero c in camareros) 
-        { 
-            camareroList.Add(_mapper.Map<CamareroDTO>(c));
-        } 
-        return camareroList;
+    {
+        var camareros = await _camareroService.FindAll();
+        return camareros.Select(c => _mapper.Map<CamareroDTO>(c)).ToList();
     }
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<CamareroDTO> Get(int id)
+    public async Task<CamareroDTO?> Get(int id)
     {
         var camarero =  await _camareroService.FindById(id); 
-        if (camarero is null) 
-        { 
-            return null;
-        } 
-        return _mapper.Map<CamareroDTO>(camarero);
+        return camarero is null ? null : _mapper.Map<CamareroDTO>(camarero);
     }
     
     [HttpPost]
@@ -52,7 +43,11 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     {
         try
         {
-            Camarero camarero = _mapper.Map<Camarero>(camareroDto); 
+            
+            var newpass = BCrypt.Net.BCrypt.HashPassword(camareroDto.Password);
+            camareroDto.Password = newpass;
+
+            var camarero = _mapper.Map<Camarero>(camareroDto); 
             await _camareroService.Save(camarero);
             return Ok("Camarero creado correctamente");
         }
@@ -64,7 +59,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
             
     [HttpPut("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<IActionResult> Update(int id, CamareroDTO camareroDto)
+    public async Task<IActionResult?> Update(int id, CamareroDTO camareroDto)
     {
         try
         {
@@ -87,7 +82,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Delete(int id) 
     { 
-        bool deleted = await _camareroService.DeleteById(id);
+        var deleted = await _camareroService.DeleteById(id);
         if (deleted)
         {
             return Ok("Camarero borrado");

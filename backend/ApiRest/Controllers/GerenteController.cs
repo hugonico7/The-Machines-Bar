@@ -43,6 +43,9 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     {
         try
         {
+            var newpass = BCrypt.Net.BCrypt.HashPassword(gerenteDto.Password);
+            gerenteDto.Password = newpass;
+            
             var gerente = _mapper.Map<Gerente>(gerenteDto); 
             await _gerenteService.Save(gerente);
             return Ok("Gerente creado");

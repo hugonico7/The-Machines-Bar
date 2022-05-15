@@ -43,6 +43,9 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
     {
         try
         {
+            var newpass = BCrypt.Net.BCrypt.HashPassword(cocineroDto.Password);
+            cocineroDto.Password = newpass;
+            
             var cocinero = _mapper.Map<Cocinero>(cocineroDto); 
             await _cocineroService.Save(cocinero);
             return Ok("Cocinero creado");
