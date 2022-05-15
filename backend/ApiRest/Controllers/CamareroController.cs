@@ -2,9 +2,11 @@
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiRest.Controller;
+namespace ApiRest.Controllers;
 
 [Route("Camarero")]
 [ApiController]
@@ -20,6 +22,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IList<CamareroDTO>> GetAll() 
     { 
         IList<CamareroDTO> camareroList = new List<CamareroDTO>(); 
@@ -32,6 +35,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<CamareroDTO> Get(int id)
     {
         var camarero =  await _camareroService.FindById(id); 
@@ -43,7 +47,8 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CamareroDTO camareroDto) 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
+    public async Task<IActionResult> Create(CamareroDTO camareroDto)
     {
         try
         {
@@ -58,6 +63,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpPut("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Update(int id, CamareroDTO camareroDto)
     {
         try
@@ -78,6 +84,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpDelete("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Delete(int id) 
     { 
         bool deleted = await _camareroService.DeleteById(id);

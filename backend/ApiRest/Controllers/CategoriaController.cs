@@ -2,13 +2,15 @@
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
-
-namespace ApiRest.Controller;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ApiRest.Controllers;
 
 [Route("categoria")]
 [ApiController]
-public class CategoriaController : Controller
+public class CategoriaController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly CategoriaService _categoriaService;
     private readonly IMapper _mapper;
@@ -19,6 +21,7 @@ public class CategoriaController : Controller
         _mapper = imapper;
     }
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
     public async Task<IList<CategoriaDTO>> GetAll() 
     {
         var categorias = await _categoriaService.FindAll();
@@ -26,6 +29,7 @@ public class CategoriaController : Controller
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
     public async Task<CategoriaDTO?> Get(int id)
     {
         var categoria = await _categoriaService.FindById(id); 
@@ -33,6 +37,7 @@ public class CategoriaController : Controller
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(CategoriaDTO categoriaDto) 
     {
         try
@@ -48,6 +53,7 @@ public class CategoriaController : Controller
     }
             
     [HttpPut("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult?> Update(long id, CategoriaDTO categoriaDto)
     {
         try
@@ -68,6 +74,7 @@ public class CategoriaController : Controller
     }
             
     [HttpDelete("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _categoriaService.DeleteById(id); 

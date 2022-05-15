@@ -9,6 +9,5 @@ public class CocineroRepository : MasterRepoImpl<Cocinero,MyDbContext>
 {
     public CocineroRepository(MyDbContext context) : base(context)
     {
-        
     }    
 }

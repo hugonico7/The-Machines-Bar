@@ -2,13 +2,15 @@
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
-
-namespace ApiRest.Controller;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ApiRest.Controllers;
 
 [Route("producto")]
 [ApiController]
-public class ProductoController : Controller
+public class ProductoController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly ProductoService _productoService;
     private readonly IMapper _mapper;
@@ -20,6 +22,7 @@ public class ProductoController : Controller
     }
     
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
     public async Task<IList<ProductoDTO>> GetAll() 
     {
         var productos = await _productoService.FindAll();
@@ -27,7 +30,8 @@ public class ProductoController : Controller
         return productos.Select(p => _mapper.Map<ProductoDTO>(p)).ToList();
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
     public async Task<ProductoDTO?> Get(int id)
     {
         var producto = await _productoService.FindById(id); 
@@ -35,6 +39,7 @@ public class ProductoController : Controller
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(ProductoDTO productoDto) 
     {
         try
@@ -49,7 +54,8 @@ public class ProductoController : Controller
         }
     }
             
-    [HttpPut("{id}")] 
+    [HttpPut("{id:long}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult?> Update(long id, ProductoDTO productoDto)
     {
         try
@@ -69,7 +75,8 @@ public class ProductoController : Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _productoService.DeleteById(id); 

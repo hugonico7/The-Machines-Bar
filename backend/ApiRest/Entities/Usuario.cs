@@ -10,7 +10,7 @@ namespace ApiRest.Entities
     [Index("Username", Name = "username", IsUnique = true)]
     public partial class Usuario
     {
-        public Usuario(String nombre,String apellidos,String nss,String username,String password,String rol)
+        public Usuario(String nombre,String apellidos,String nss,string? username,String password,String rol)
         {
             Nombre = nombre;
             Apellidos = apellidos;
@@ -33,7 +33,7 @@ namespace ApiRest.Entities
         public string? Nss { get; set; }
         [Column("username")]
         [StringLength(50)]
-        public string Username { get; set; } = null!;
+        public string? Username { get; set; } = null!;
         [Column("password")]
         [StringLength(200)]
         public string Password { get; set; } = null!;

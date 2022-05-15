@@ -1,5 +1,7 @@
 ﻿using ApiRest.DTO;
 using ApiRest.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiRest.Controller;
 
@@ -21,6 +23,7 @@ public class PedidoController : Controller
     }
     
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<IList<PedidoDTO>> GetAll() 
     {
         var pedidos = await _pedidoService.FindAll();
@@ -29,14 +32,31 @@ public class PedidoController : Controller
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<PedidoDTO?> Get(int id)
     {
-        var pedido = await _pedidoService.FindById(id); 
+        var pedido = await _pedidoService.FindById(id);
         return pedido is null ? null : _mapper.Map<PedidoDTO>(pedido);
+    }
+
+    [HttpGet("/cuenta")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<PedidoDTO?> GetCuenta(int id)
+    {
+        var pedido = await _pedidoService.FindById(id);
+        foreach (var comanda in pedido.Comanda)
+        {
+            pedido.PrecioTotal += comanda.IdProductoNavigation.Precio;
+        }
+
+        await _pedidoService.Update(pedido);
+
+        return _mapper.Map<PedidoDTO>(pedido);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(PedidoDTO pedidoDto) 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<IActionResult> Create(PedidoCreationDTO pedidoDto) 
     {
         try
         {
@@ -50,7 +70,8 @@ public class PedidoController : Controller
         }
     }
             
-    [HttpPut("{id}")] 
+    [HttpPut("{id:long}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<IActionResult?> Update(long id, PedidoDTO pedidoDto)
     {
         try
@@ -70,12 +91,11 @@ public class PedidoController : Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _pedidoService.DeleteById(id); 
         return deleted;
     }
-    
-
 }

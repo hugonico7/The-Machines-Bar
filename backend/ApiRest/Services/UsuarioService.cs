@@ -46,4 +46,9 @@ public class UsuarioService
         var usuarioUp = await UserRepository.Update(usuario);
         return usuarioUp;
     }
+
+    public async Task<Usuario?> GetUserByUsername(String username)
+    {
+        return await UserRepository.GetUsuarioByUsername(username);
+    }
 }

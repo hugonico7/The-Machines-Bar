@@ -86,3 +86,11 @@ C:\Users\Hugo\Documents\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Micros
 C:\Users\Hugo\Documents\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Hugo\Documents\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Hugo\Documents\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Sergio\RiderProjects\The-Machines-Bar\backend\ApiRest\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

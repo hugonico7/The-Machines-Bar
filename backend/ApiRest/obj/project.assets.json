@@ -6415,20 +6415,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Hugo\\.nuget\\packages\\": {}
+    "C:\\Users\\Sergio\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Hugo\\Documents\\The-Machines-Bar\\backend\\ApiRest\\ApiRest.csproj",
+      "projectUniqueName": "C:\\Users\\Sergio\\RiderProjects\\The-Machines-Bar\\backend\\ApiRest\\ApiRest.csproj",
       "projectName": "ApiRest",
-      "projectPath": "C:\\Users\\Hugo\\Documents\\The-Machines-Bar\\backend\\ApiRest\\ApiRest.csproj",
-      "packagesPath": "C:\\Users\\Hugo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Hugo\\Documents\\The-Machines-Bar\\backend\\ApiRest\\obj\\",
+      "projectPath": "C:\\Users\\Sergio\\RiderProjects\\The-Machines-Bar\\backend\\ApiRest\\ApiRest.csproj",
+      "packagesPath": "C:\\Users\\Sergio\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Sergio\\RiderProjects\\The-Machines-Bar\\backend\\ApiRest\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Hugo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Sergio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"

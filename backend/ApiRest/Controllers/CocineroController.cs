@@ -2,9 +2,11 @@
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiRest.Controller;
+namespace ApiRest.Controllers;
 
 [Route("Cocinero")]
 [ApiController]
@@ -20,34 +22,28 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<List<CocineroDTO>> GetAll() 
-    { 
-        List<CocineroDTO> cocineroList = new List<CocineroDTO>(); 
-        var cocineros = await _cocineroService.FindAll(); 
-        foreach (Cocinero c in cocineros) 
-        { 
-            cocineroList.Add(_mapper.Map<CocineroDTO>(c));
-        } 
-        return cocineroList;
+    {
+        var cocineros = await _cocineroService.FindAll();
+        return cocineros.Select(c => _mapper.Map<CocineroDTO>(c)).ToList();
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public CocineroDTO Get(int id)
     {
         var cocinero = _cocineroService.FindById(id); 
-        if (cocinero is null) 
-        { 
-            return null;
-        } 
         return _mapper.Map<CocineroDTO>(cocinero);
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(CocineroDTO cocineroDto) 
     {
         try
         {
-            Cocinero cocinero = _mapper.Map<Cocinero>(cocineroDto); 
+            var cocinero = _mapper.Map<Cocinero>(cocineroDto); 
             await _cocineroService.Save(cocinero);
             return Ok("Cocinero creado");
         }
@@ -58,7 +54,8 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
         
     }
             
-    [HttpPut("{id}")] 
+    [HttpPut("{id:long}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Update(long id, CocineroDTO cocineroDto)
     {
         try
@@ -77,7 +74,8 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<bool> Delete(int id) 
     {
         var deleted = await _cocineroService.DeleteById(id); 

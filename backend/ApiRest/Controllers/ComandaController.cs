@@ -1,19 +1,16 @@
 ﻿using ApiRest.DTO;
 using ApiRest.Entities;
-using ApiRest.Repository;
-
-namespace ApiRest.Controller;
-
 using ApiRest.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+
+namespace ApiRest.Controllers;
 
 [Route("comanda")]
 [ApiController]
-public class ComandaController : Controller
+public class ComandaController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly ComandaService _comandaService;
     private readonly IMapper _mapper;
@@ -25,7 +22,7 @@ public class ComandaController : Controller
     }
     
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero,cocinero")]
     public async Task<IList<ComandaDTO>> GetAll() 
     {
         var comandas = await _comandaService.FindAll();
@@ -33,6 +30,7 @@ public class ComandaController : Controller
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero,cocinero")]
     public async Task<ComandaDTO?> Get(int id)
     {
         var comanda = await _comandaService.FindById(id); 
@@ -40,7 +38,8 @@ public class ComandaController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(ComandaDTO comandaDto) 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<IActionResult> Create(ComandaCreationDTO comandaDto) 
     {
         try
         {
@@ -54,7 +53,8 @@ public class ComandaController : Controller
         }
     }
             
-    [HttpPut("{id}")] 
+    [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero,cocinero")]
     public async Task<IActionResult?> Update(long id, ComandaDTO comandaDto)
     {
         try
@@ -75,6 +75,7 @@ public class ComandaController : Controller
     }
             
     [HttpDelete("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _comandaService.DeleteById(id); 

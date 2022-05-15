@@ -1,15 +1,16 @@
 ﻿using ApiRest.DTO;
 using ApiRest.Entities;
-
-namespace ApiRest.Controller;
-
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ApiRest.Controllers;
 
 [Route("reserva")]
 [ApiController]
-public class ReservaController : Controller
+public class ReservaController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly ReservaService _reservaService;
     private readonly IMapper _mapper;
@@ -21,6 +22,7 @@ public class ReservaController : Controller
     }
     
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<IList<ReservaDTO>> GetAll() 
     {
         var reservas = await _reservaService.FindAll();
@@ -28,6 +30,7 @@ public class ReservaController : Controller
     }
     
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<ReservaDTO?> Get(int id)
     {
         var reserva = await _reservaService.FindById(id); 
@@ -35,6 +38,7 @@ public class ReservaController : Controller
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<IActionResult> Create(ReservaDTO reservaDto) 
     {
         try
@@ -50,6 +54,7 @@ public class ReservaController : Controller
     }
             
     [HttpPut("{id}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<IActionResult> Update(long id, ReservaDTO reservaDto)
     {
         try
@@ -69,7 +74,8 @@ public class ReservaController : Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _reservaService.DeleteById(id); 

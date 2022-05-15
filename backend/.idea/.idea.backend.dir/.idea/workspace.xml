@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="73d66120-a677-4061-bf82-31252f22034c" name="Changes" comment="" />
+    <list default="true" id="73d66120-a677-4061-bf82-31252f22034c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/Controllers/PedidoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/Controllers/PedidoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/Repository/CocineroRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/Repository/CocineroRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/Repository/UsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/Repository/UsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/bin/Debug/net6.0/ApiRest.dll" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/bin/Debug/net6.0/ApiRest.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/bin/Debug/net6.0/ApiRest.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/bin/Debug/net6.0/ApiRest.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.dll" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ApiRest.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ref/ApiRest.dll" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/ref/ApiRest.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/refint/ApiRest.dll" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/Debug/net6.0/refint/ApiRest.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiRest/obj/staticwebassets.pack.sentinel" beforeDir="false" afterPath="$PROJECT_DIR$/ApiRest/obj/staticwebassets.pack.sentinel" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,9 +32,13 @@
     <setting file="file://$PROJECT_DIR$/ApiRest/Entities/Comanda.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiRest/Entities/Camarero.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiRest/Entities/Cocinero.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ApiRest/Repository/MasterRepoImpl.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiRest/Context/MyDbContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiRest/Entities/Categoria.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ApiRest/Repository/CocineroRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ApiRest/Repository/IMasterRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiRest/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ApiRest/DTO/CamareroCreationDTO.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -52,6 +69,7 @@
       <workItem from="1650734476941" duration="516000" />
       <workItem from="1650822535844" duration="338000" />
       <workItem from="1650822914828" duration="558000" />
+      <workItem from="1652619506318" duration="372000" />
     </task>
     <task id="LOCAL-00001" summary="probar">
       <created>1650734605025</created>

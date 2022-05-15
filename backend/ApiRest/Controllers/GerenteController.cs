@@ -2,9 +2,11 @@
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiRest.Controller;
+namespace ApiRest.Controllers;
 
 [Route("Gerente")]
 [ApiController]
@@ -20,34 +22,28 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IList<GerenteDTO>> GetAll() 
-    { 
-        IList<GerenteDTO> gerenteList = new List<GerenteDTO>(); 
-        var gerentes = await _gerenteService.FindAll(); 
-        foreach (Gerente g in gerentes) 
-        { 
-            gerenteList.Add(_mapper.Map<GerenteDTO>(g));
-        } 
-        return gerenteList;
+    {
+        var gerentes = await _gerenteService.FindAll();
+        return gerentes.Select(g => _mapper.Map<GerenteDTO>(g)).ToList();
     }
     
-    [HttpGet("{id}")]
-    public async Task<GerenteDTO> Get(int id)
+    [HttpGet("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
+    public async Task<GerenteDTO?> Get(int id)
     {
         var gerente = await _gerenteService.FindById(id); 
-        if (gerente is null) 
-        { 
-            return null;
-        } 
-        return _mapper.Map<GerenteDTO>(gerente);
+        return gerente is null ? null : _mapper.Map<GerenteDTO>(gerente);
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(GerenteDTO gerenteDto) 
     {
         try
         {
-            Gerente gerente = _mapper.Map<Gerente>(gerenteDto); 
+            var gerente = _mapper.Map<Gerente>(gerenteDto); 
             await _gerenteService.Save(gerente);
             return Ok("Gerente creado");
         }
@@ -58,7 +54,8 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
     }
             
     [HttpPut("{id}")] 
-    public async Task<IActionResult> Update(long id, GerenteDTO gerenteDto)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
+    public async Task<IActionResult?> Update(long id, GerenteDTO gerenteDto)
     {
         try
         {
@@ -76,7 +73,8 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id:int}")] 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _gerenteService.DeleteById(id); 

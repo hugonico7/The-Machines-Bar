@@ -22,7 +22,7 @@ namespace ApiRest.Entities
         [StringLength(50)]
         public string Nombre { get; set; } = null!;
         [Column("precio")]
-        [Precision(2, 2)]
+        [Precision(4, 2)]
         public decimal Precio { get; set; }
         [Column("id_cat", TypeName = "int(50)")]
         public int IdCat { get; set; }

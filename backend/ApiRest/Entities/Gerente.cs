@@ -10,7 +10,7 @@ namespace ApiRest.Entities
     public partial class Gerente : Usuario
     {
         private static String Rol = "gerente";
-        public Gerente(String nombre,String apellidos,String nss,String username,String password)
+        public Gerente(String nombre,String apellidos,String nss,string? username,String password)
             :base(nombre, apellidos, nss, username, password,Rol)
         {
 

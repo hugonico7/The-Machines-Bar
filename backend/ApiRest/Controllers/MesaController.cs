@@ -1,14 +1,16 @@
 ﻿using ApiRest.DTO;
-
-namespace ApiRest.Controller;
 using ApiRest.Entities;
 using ApiRest.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ApiRest.Controllers;
 
 [Route("Mesa")]
 [ApiController]
-public class MesaController : Controller
+public class MesaController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly MesaService _mesaService;
     private readonly IMapper _mapper;
@@ -20,24 +22,23 @@ public class MesaController : Controller
     }
     
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
     public async Task<IList<MesaDTO>> GetAll() 
     {
         var mesas = await _mesaService.FindAll();
         return mesas.Select(m => _mapper.Map<MesaDTO>(m)).ToList();
     }
     
-    [HttpGet("{id}")]
-    public async Task<MesaDTO> Get(int id)
+    [HttpGet("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,cocinero,camarero")]
+    public async Task<MesaDTO?> Get(int id)
     {
         var mesa = await _mesaService.FindById(id); 
-        if (mesa is null) 
-        { 
-            return null;
-        } 
-        return _mapper.Map<MesaDTO>(mesa);
+        return mesa is null ? null : _mapper.Map<MesaDTO>(mesa);
     }
     
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(MesaDTO mesaDto) 
     {
         try
@@ -52,8 +53,9 @@ public class MesaController : Controller
         }
     }
             
-    [HttpPut("{id}")] 
-    public async Task<IActionResult> Update(long id, MesaDTO mesaDto)
+    [HttpPut("{id:long}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
+    public async Task<IActionResult?> Update(long id, MesaDTO mesaDto)
     {
         try
         {
@@ -72,7 +74,8 @@ public class MesaController : Controller
         }
     }
             
-    [HttpDelete("{id}")] 
+    [HttpDelete("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<bool> Delete(int id) 
     { 
         var deleted = await _mesaService.DeleteById(id); 
