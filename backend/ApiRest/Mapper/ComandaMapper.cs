@@ -14,5 +14,6 @@ public class ComandaMapper : Profile
         CreateMap<Comanda, ComandaCreationDTO>();
         CreateMap<ComandaInProductoDTO, Comanda>();
         CreateMap<Comanda, ComandaInProductoDTO>();
+        CreateMap<ComandaCocineroDTO,Comanda>();
     }
 }

@@ -35,9 +35,9 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
         return users.Select(u => _mapper.Map<UsuarioDTO>(u)).ToList();
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<UsuarioDTO?> GetUser(int id)
+    public async Task<UsuarioDTO?> GetUser(long id)
     {
         var user = await _usuarioService.FindById(id);
         return user is null ? null : _mapper.Map<UsuarioDTO>(user);
@@ -76,7 +76,7 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
 
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> DeleteUser(int id)
+    public async Task<bool> DeleteUser(long id)
     {
         var deleted = await _usuarioService.DeleteById(id);
         return deleted;
@@ -86,31 +86,56 @@ public class UsuarioController : Microsoft.AspNetCore.Mvc.Controller
     [Route("/Login")]
     public async Task<IResult> Login(UsuarioLoginDTO user)
     {
-        var userlogged = await _usuarioService.GetUserByUsername(user.Username);
 
-        var comprobar = BCrypt.Net.BCrypt.Verify(user.Password, userlogged!.Password);
-
-        if (comprobar)
+        try
         {
-            var claims = new[]
-            {
+            var userlogged = await _usuarioService.GetUserByUsername(user.Username);
+            if (userlogged != null) {
+                var comprobar = BCrypt.Net.BCrypt.Verify(user.Password, userlogged!.Password);
+
+                if (comprobar)
+                {
+                    var claims = new[]
+                    {
                 new Claim(ClaimTypes.NameIdentifier, userlogged?.Username!),
                 new Claim(ClaimTypes.Role, userlogged?.Rol!)
             };
 
-            var token = new JwtSecurityToken(_config.GetSection("Jwt").GetSection("Issuer").Value,
-                _config.GetSection("Jwt").GetSection("Audience").Value, claims, expires: DateTime.UtcNow.AddHours(1),
-                notBefore: DateTime.UtcNow,
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(_config.GetSection("Jwt").GetSection("key").Value ?? string.Empty)),
-                    SecurityAlgorithms.HmacSha512));
+                    var token = new JwtSecurityToken(_config.GetSection("Jwt").GetSection("Issuer").Value,
+                        _config.GetSection("Jwt").GetSection("Audience").Value, claims, expires: DateTime.UtcNow.AddHours(8),
+                        notBefore: DateTime.UtcNow,
+                        signingCredentials: new SigningCredentials(
+                            new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(_config.GetSection("Jwt").GetSection("key").Value ?? string.Empty)),
+                            SecurityAlgorithms.HmacSha512));
 
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Results.Ok(tokenString);
+                    return Results.Ok(tokenString);
+                }
+                else
+                    return Results.BadRequest("Login fail");
+            }
+            else
+            {
+                return Results.BadRequest("Login fail");
+            }
+
+            
         }
-        else
+        catch (Exception)
+        {
             return Results.BadRequest("Login fail");
+            
+        }
     }
+    [HttpPost]
+    [Route("/Login/UsuarioLogueado")]
+    public async Task<UsuarioAfterLoginDTO> getDatosUsuario(String username)
+    {
+        var userLogged = await _usuarioService.GetUserByUsername(username);
+
+        return _mapper.Map<UsuarioAfterLoginDTO>(userLogged);
+    }
+
 }

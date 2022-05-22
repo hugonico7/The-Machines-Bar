@@ -28,13 +28,6 @@ namespace ApiRest.Context
         public virtual DbSet<Reserva> Reservas { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySql("name=MariaDB", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.3.34-mariadb"));
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

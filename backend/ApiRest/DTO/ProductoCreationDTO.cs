@@ -2,8 +2,8 @@
 
 public class ProductoCreationDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Nombre { get; set; } = null!;
     public decimal Precio { get; set; }
-    public int IdCat { get; set; }
+    public long IdCat { get; set; }
 }

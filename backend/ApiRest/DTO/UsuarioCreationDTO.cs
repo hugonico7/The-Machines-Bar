@@ -2,7 +2,7 @@
 
 public class UsuarioCreationDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Nombre { get; set; }
     public string Apellidos { get; set; }
     public string Nss { get; set; }

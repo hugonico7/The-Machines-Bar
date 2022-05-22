@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static ApiRest.Entities.Pedido;
 
 namespace ApiRest.Controllers;
 
@@ -13,11 +14,15 @@ namespace ApiRest.Controllers;
 public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly CamareroService _camareroService;
+    private readonly PedidoService _pedidoService;
+    private readonly ComandaService _comandaService;
     private readonly IMapper _mapper;
             
-    public CamareroController(CamareroService camareroService, IMapper mapper) 
+    public CamareroController(CamareroService camareroService,ComandaService comanda, PedidoService pedidoService, IMapper mapper) 
     { 
         _camareroService = camareroService; 
+        _pedidoService  = pedidoService;
+        _comandaService = comanda;
         _mapper = mapper;
     }
             
@@ -31,7 +36,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<CamareroDTO?> Get(int id)
+    public async Task<CamareroDTO?> Get(long id)
     {
         var camarero =  await _camareroService.FindById(id); 
         return camarero is null ? null : _mapper.Map<CamareroDTO>(camarero);
@@ -59,7 +64,7 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
             
     [HttpPut("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<IActionResult?> Update(int id, CamareroDTO camareroDto)
+    public async Task<IActionResult?> Update(long id, CamareroDTO camareroDto)
     {
         try
         {
@@ -77,10 +82,110 @@ public class CamareroController : Microsoft.AspNetCore.Mvc.Controller
         }
         
     }
-            
+
+    [HttpGet]
+    [Route("Bebidas/{idCamarero}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="camarero")]
+    public async Task<List<ComandaDTO>?> GetBebidas(long idCamarero)
+    {
+        try
+        {
+            var comandas = await _camareroService.GetBebidas(idCamarero);
+            var comandasDto = new List<ComandaDTO>();
+
+            comandas.ForEach(com =>
+                comandasDto.Add(_mapper.Map<ComandaDTO>(com))
+                );
+
+            return comandasDto;
+        }catch(Exception e)
+        {
+            return null;
+        }
+    }
+
+    [HttpGet]
+    [Route("{idCamarero}/Comandas")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<List<ComandaDTO>?> GetComandasActivas(long idCamarero)
+    {
+        try
+        {
+            var comandas = await _camareroService.GetComandasActivas(idCamarero);
+            var comandasDto = new List<ComandaDTO>();
+
+            comandas.ForEach(com =>
+                comandasDto.Add(_mapper.Map<ComandaDTO>(com))
+                );
+
+            return comandasDto;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    [HttpGet]
+    [Route("{id}/Pedidos")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<List<PedidoDTO>?> GetPedidoCamarero(long id)
+    {
+        try
+        {
+            var pedidos = await _pedidoService.GetPedidoCamarero(id);
+            var pedidosDto = new List<PedidoDTO>();
+            pedidos.ForEach(ped =>
+                pedidosDto.Add(_mapper.Map<PedidoDTO>(ped))
+            );
+            return pedidosDto;
+        }
+        catch (Exception)
+        {
+
+            return null;
+        }
+    }
+    
+    [HttpPut]
+    [Route("Comanda/{idComanda}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<IActionResult> SetComandaEntregada(long idComanda)
+    {
+        var comanda = await _comandaService.FindById(idComanda);
+        if (comanda == null)
+        {
+            return BadRequest("No existe esa comanda");
+        }
+        else
+        {
+            comanda.Estado = (EstadosComanda)3;
+            await _comandaService.Update(comanda);
+            return Ok("Comanda Entregada");
+        }
+    }
+
+
+    [HttpPut]
+    [Route("Pedido/{idPedido}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
+    public async Task<IActionResult> SetPedidoPagado(long idPedido)
+    {
+        var pedido = await _pedidoService.FindById(idPedido);
+        if (pedido == null)
+        {
+            return BadRequest("No existe ese pedido");
+        }
+        else
+        {
+            pedido.Estado = (EstadosPedido)1;
+            await _pedidoService.Update(pedido);
+            return Ok("Pedido Cobrado");
+        }
+    }
+
     [HttpDelete("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<IActionResult> Delete(int id) 
+    public async Task<IActionResult> Delete(long id) 
     { 
         var deleted = await _camareroService.DeleteById(id);
         if (deleted)

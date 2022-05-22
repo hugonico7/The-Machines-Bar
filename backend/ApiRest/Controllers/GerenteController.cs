@@ -29,16 +29,16 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
         return gerentes.Select(g => _mapper.Map<GerenteDTO>(g)).ToList();
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<GerenteDTO?> Get(int id)
+    public async Task<GerenteDTO?> Get(long id)
     {
         var gerente = await _gerenteService.FindById(id); 
         return gerente is null ? null : _mapper.Map<GerenteDTO>(gerente);
     }
     
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
     public async Task<IActionResult> Create(GerenteDTO gerenteDto) 
     {
         try
@@ -76,9 +76,9 @@ public class GerenteController : Microsoft.AspNetCore.Mvc.Controller
         }
     }
             
-    [HttpDelete("{id:int}")] 
+    [HttpDelete("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _gerenteService.DeleteById(id); 
         return deleted;

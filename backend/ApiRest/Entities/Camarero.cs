@@ -18,5 +18,8 @@ namespace ApiRest.Entities
         
         [InverseProperty("IdCamareroNavigation")]
         public virtual ICollection<Comanda> Comanda { get; set; }
+
+        [InverseProperty("IdCamareroNavigation")]
+        public virtual ICollection<Pedido> Pedidos { get; set; }
     }
 }

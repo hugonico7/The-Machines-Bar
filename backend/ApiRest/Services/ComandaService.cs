@@ -6,12 +6,14 @@ namespace ApiRest.Service;
 public class ComandaService
 {
     private readonly ComandaRepository _comandaRepository;
+    private readonly CocineroRepository _cocineroRepository;
 
-    public ComandaService(ComandaRepository comandaRepository)
+    public ComandaService(ComandaRepository comandaRepository,CocineroRepository cocineroRepository)
     {
         _comandaRepository = comandaRepository;
+        _cocineroRepository = cocineroRepository;
     }
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -29,7 +31,7 @@ public class ComandaService
         return await _comandaRepository.GetAll();
     }
 
-    public async Task<Comanda?> FindById(int id)
+    public async Task<Comanda?> FindById(long id)
     {
         return await _comandaRepository.GetById(id);
     }
@@ -44,5 +46,20 @@ public class ComandaService
     {
         var comandaUp = await _comandaRepository.Update(comanda);
         return comandaUp;
+    }
+
+    public async Task<Comanda> AsignCocinero(long idComanda, long idCocinero)
+    {
+        var comanda = await _comandaRepository.GetById(idComanda);
+        if (comanda == null)
+        {
+            //Nada
+        }
+        else
+        {
+            comanda.IdCocinero = idCocinero;
+        }
+        
+        return await _comandaRepository.Update(comanda);
     }
 }

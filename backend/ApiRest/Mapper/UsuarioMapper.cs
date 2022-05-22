@@ -14,5 +14,7 @@ public class UsuarioMapper : Profile
         CreateMap<Usuario, UsuarioCreationDTO>();
         CreateMap<Usuario, UsuarioLoginDTO>();
         CreateMap<UsuarioLoginDTO, Usuario>();
+        CreateMap<UsuarioAfterLoginDTO, Usuario>();
+        CreateMap<Usuario,UsuarioAfterLoginDTO>();
     }
 }

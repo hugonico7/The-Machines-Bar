@@ -16,10 +16,10 @@ namespace ApiRest.Entities
         }
 
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
-        [Column("estado", TypeName = "enum('Libre','Reservada','Ocupada')")]
-        public string Estado { get; set; } = null!;
+        [Column("id")]
+        public long Id { get; set; }
+        [Column("estado")]
+        public EstadosMesa Estado { get; set; }
 
         [InverseProperty("IdMesaNavigation")]
         public virtual ICollection<Pedido> Pedidos { get; set; }
@@ -27,5 +27,11 @@ namespace ApiRest.Entities
         [ForeignKey("IdMesa")]
         [InverseProperty("IdMesas")]
         public virtual ICollection<Reserva> IdReservas { get; set; }
+        public enum EstadosMesa
+        {
+            Libre,
+            Reservada,
+            Ocupada
+        }
     }
 }

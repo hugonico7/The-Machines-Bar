@@ -2,7 +2,7 @@
 
 public class ProductoInCategoriaDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Nombre { get; set; } = null!;
     public decimal Precio { get; set; }
 }

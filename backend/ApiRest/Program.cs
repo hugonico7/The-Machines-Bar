@@ -30,10 +30,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization();
 
 // Add DbContext
-var connectionString = builder.Configuration.GetConnectionString("MariaDB");
+var connectionString = builder.Configuration.GetConnectionString("SQLServer");
 builder.Services.AddDbContext<MyDbContext>(option =>
 {
-    option.UseLazyLoadingProxies().UseMySql(connectionString,ServerVersion.AutoDetect(connectionString));
+    option.UseLazyLoadingProxies().UseSqlServer(connectionString);
 });
 
 // Add Repositories

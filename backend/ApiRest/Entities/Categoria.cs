@@ -15,8 +15,8 @@ namespace ApiRest.Entities
         }
 
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
+        [Column("id")]
+        public long Id { get; set; }
         [Column("nombre")]
         [StringLength(50)]
         public string Nombre { get; set; }

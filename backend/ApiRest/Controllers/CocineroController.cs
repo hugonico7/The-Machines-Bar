@@ -13,11 +13,13 @@ namespace ApiRest.Controllers;
 public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly CocineroService _cocineroService;
+    private readonly ComandaService _comandaService;
     private readonly IMapper _mapper;
             
-    public CocineroController(CocineroService cocineroService, IMapper mapper) 
+    public CocineroController(CocineroService cocineroService,ComandaService comandaService, IMapper mapper) 
     { 
         _cocineroService = cocineroService; 
+        _comandaService = comandaService;
         _mapper = mapper;
     }
             
@@ -31,7 +33,7 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public CocineroDTO Get(int id)
+    public CocineroDTO Get(long id)
     {
         var cocinero = _cocineroService.FindById(id); 
         return _mapper.Map<CocineroDTO>(cocinero);
@@ -77,11 +79,71 @@ public class CocineroController : Microsoft.AspNetCore.Mvc.Controller
         }
     }
             
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     {
         var deleted = await _cocineroService.DeleteById(id); 
         return deleted;
+    }
+
+    [HttpGet]
+    [Route("{idCocinero}/Comandas")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "cocinero")]
+    public async Task<List<ComandaDTO>?> GetComandasAsignadas(long idCocinero)
+    {
+        try
+        {
+            var comandas = await _cocineroService.GetComandasAsignadas(idCocinero);
+            var comandasDto = new List<ComandaDTO>();
+
+            comandas.ForEach(com =>
+                comandasDto.Add(_mapper.Map<ComandaDTO>(com))
+                );
+
+            return comandasDto;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    [HttpGet]
+    [Route("Comandas")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "cocinero")]
+    public async Task<List<ComandaDTO>?> GetComandasCocina()
+    {
+        try
+        {
+            var comandas = await _cocineroService.GetComandasCocina();
+            var comandaDTOs = new List<ComandaDTO>();
+            comandas.ForEach(ped =>
+                comandaDTOs.Add(_mapper.Map<ComandaDTO>(ped))
+            );
+            return comandaDTOs;
+        }
+        catch (Exception)
+        {
+
+            return null;
+        }
+    }
+
+    [HttpPut]
+    [Route("Comanda/{idComanda}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "cocinero")]
+    public async Task<IActionResult> SetComandaPreparada(long idComanda)
+    {
+        var comanda = await _comandaService.FindById(idComanda);
+        if (comanda == null)
+        {
+            return BadRequest("No existe esa comanda");
+        }
+        else
+        {
+            comanda.Estado = (EstadosComanda)2;
+            await _comandaService.Update(comanda);
+            return Ok("Comanda Preparada");
+        }
     }
 }

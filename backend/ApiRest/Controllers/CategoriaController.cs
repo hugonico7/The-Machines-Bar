@@ -30,7 +30,7 @@ public class CategoriaController : Microsoft.AspNetCore.Mvc.Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
-    public async Task<CategoriaDTO?> Get(int id)
+    public async Task<CategoriaDTO?> Get(long id)
     {
         var categoria = await _categoriaService.FindById(id); 
         return categoria is null ? null : _mapper.Map<CategoriaDTO>(categoria);
@@ -75,7 +75,7 @@ public class CategoriaController : Microsoft.AspNetCore.Mvc.Controller
             
     [HttpDelete("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _categoriaService.DeleteById(id); 
         return deleted;

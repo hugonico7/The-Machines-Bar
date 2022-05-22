@@ -2,11 +2,11 @@
 
 public class ComandaCreationDTO
 {
-    public int Id { get; set; }
-    public int IdCamarero { get; set; }
-    public int? IdCocinero { get; set; }
-    public int IdProducto { get; set; }
-    public int IdPedido { get; set; }
+    public long Id { get; set; }
+    public long IdCamarero { get; set; }
+    public long? IdCocinero { get; set; }
+    public long IdProducto { get; set; }
+    public long IdPedido { get; set; }
     public string? Descripcion { get; set; }
     public string? Estado { get; set; }
 }

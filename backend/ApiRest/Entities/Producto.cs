@@ -16,16 +16,16 @@ namespace ApiRest.Entities
         }
 
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
+        [Column("id")]
+        public long Id { get; set; }
         [Column("nombre")]
         [StringLength(50)]
         public string Nombre { get; set; } = null!;
         [Column("precio")]
         [Precision(4, 2)]
         public decimal Precio { get; set; }
-        [Column("id_cat", TypeName = "int(50)")]
-        public int IdCat { get; set; }
+        [Column("id_cat")]
+        public long IdCat { get; set; }
 
         [ForeignKey("IdCat")]
         [InverseProperty("Productos")]

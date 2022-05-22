@@ -12,7 +12,7 @@ public class ReservaService
         _repository = reservaRepository;
     }
     
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -30,7 +30,7 @@ public class ReservaService
         return await _repository.GetAll();
     }
 
-    public async Task<Reserva?> FindById(int id)
+    public async Task<Reserva?> FindById(long id)
     {
         return await _repository.GetById(id);
     }

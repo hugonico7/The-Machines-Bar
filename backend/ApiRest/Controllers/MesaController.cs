@@ -13,12 +13,14 @@ namespace ApiRest.Controllers;
 public class MesaController : Microsoft.AspNetCore.Mvc.Controller
 {
     private readonly MesaService _mesaService;
+    private readonly PedidoService _pedidoService;
     private readonly IMapper _mapper;
 
-    public MesaController(MesaService mesaService,IMapper mapper)
+    public MesaController(MesaService mesaService,IMapper mapper,PedidoService pedidoService)
     {
         _mesaService = mesaService;
         _mapper = mapper;
+        _pedidoService = pedidoService;
     }
     
     [HttpGet]
@@ -29,9 +31,9 @@ public class MesaController : Microsoft.AspNetCore.Mvc.Controller
         return mesas.Select(m => _mapper.Map<MesaDTO>(m)).ToList();
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,cocinero,camarero")]
-    public async Task<MesaDTO?> Get(int id)
+    public async Task<MesaDTO?> Get(long id)
     {
         var mesa = await _mesaService.FindById(id); 
         return mesa is null ? null : _mapper.Map<MesaDTO>(mesa);
@@ -74,12 +76,20 @@ public class MesaController : Microsoft.AspNetCore.Mvc.Controller
         }
     }
             
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _mesaService.DeleteById(id); 
         return deleted;
+    }
+    [HttpGet]
+    [Route("MesaPedido/{idMesa:long}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
+    public async Task<PedidoDTO> GetPedidoByMesaAsync(long idMesa)
+    {
+        var pedido =  await _pedidoService.GetPedidoByMesaAsync(idMesa);
+        return _mapper.Map<PedidoDTO>(pedido);
     }
 
 }

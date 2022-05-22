@@ -30,9 +30,9 @@ public class ProductoController : Microsoft.AspNetCore.Mvc.Controller
         return productos.Select(p => _mapper.Map<ProductoDTO>(p)).ToList();
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero,cocinero")]
-    public async Task<ProductoDTO?> Get(int id)
+    public async Task<ProductoDTO?> Get(long id)
     {
         var producto = await _productoService.FindById(id); 
         return producto is null ? null : _mapper.Map<ProductoDTO>(producto);
@@ -77,7 +77,7 @@ public class ProductoController : Microsoft.AspNetCore.Mvc.Controller
             
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _productoService.DeleteById(id); 
         return deleted;

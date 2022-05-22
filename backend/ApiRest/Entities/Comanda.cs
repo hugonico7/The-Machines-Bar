@@ -14,21 +14,21 @@ namespace ApiRest.Entities
     public partial class Comanda
     {
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
-        [Column("id_camarero", TypeName = "int(50)")]
-        public int IdCamarero { get; set; }
-        [Column("id_cocinero", TypeName = "int(50)")]
-        public int? IdCocinero { get; set; }
-        [Column("id_producto", TypeName = "int(50)")]
-        public int IdProducto { get; set; }
-        [Column("id_pedido", TypeName = "int(50)")]
-        public int IdPedido { get; set; }
+        [Column("id")]
+        public long Id { get; set; }
+        [Column("id_camarero")]
+        public long IdCamarero { get; set; }
+        [Column("id_cocinero")]
+        public long? IdCocinero { get; set; }
+        [Column("id_producto")]
+        public long IdProducto { get; set; }
+        [Column("id_pedido")]
+        public long IdPedido { get; set; }
         [Column("descripcion")]
         [StringLength(50)]
         public string? Descripcion { get; set; }
-        [Column("estado", TypeName = "enum('Pendiente','En Preparación','Preparado','Entregado')")]
-        public string? Estado { get; set; }
+        [Column("estado")]
+        public EstadosComanda Estado { get; set; }
 
         [ForeignKey("IdCamarero")]
         [InverseProperty("Comanda")]
@@ -42,5 +42,13 @@ namespace ApiRest.Entities
         [ForeignKey("IdProducto")]
         [InverseProperty("Comanda")]
         public virtual Producto IdProductoNavigation { get; set; } = null!;
+    }
+
+    public enum EstadosComanda
+    {
+        Pendiente,
+        Preparando,
+        Preparado,
+        Entregado
     }
 }

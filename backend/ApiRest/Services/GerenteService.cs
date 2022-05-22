@@ -12,7 +12,7 @@ public class GerenteService
         _gerenteRepository = gerenteRepository;
     }
 
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -30,7 +30,7 @@ public class GerenteService
         return await _gerenteRepository.GetAll();
     }
 
-    public async Task<Gerente?> FindById(int id)
+    public async Task<Gerente?> FindById(long id)
     {
         return await _gerenteRepository.GetById(id);
     }

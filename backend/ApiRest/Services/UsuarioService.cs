@@ -12,7 +12,7 @@ public class UsuarioService
         UserRepository = userRepository;
     }
 
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -30,7 +30,7 @@ public class UsuarioService
         return await UserRepository.GetAll();
     }
 
-    public async Task<Usuario?> FindById(int id)
+    public async Task<Usuario?> FindById(long id)
     {
         return await UserRepository.GetById(id);
     }

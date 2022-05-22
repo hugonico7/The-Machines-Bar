@@ -11,7 +11,7 @@ public class MesaService
     {
         _mesaRepository = mesaRepository;
     }
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -29,7 +29,7 @@ public class MesaService
         return await _mesaRepository.GetAll();
     }
 
-    public async Task<Mesa?> FindById(int id)
+    public async Task<Mesa?> FindById(long id)
     {
         return await _mesaRepository.GetById(id);
     }

@@ -16,22 +16,32 @@ namespace ApiRest.Entities
         }
 
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
+        [Column("id")]
+        public long Id { get; set; }
         [Column("fecha", TypeName = "datetime")]
         public DateTime? Fecha { get; set; }
         [Column("precio_total")]
         [Precision(5, 2)]
         public decimal PrecioTotal { get; set; }
-        [Column("estado", TypeName = "enum('Pagado','Pendiente')")]
-        public string? Estado { get; set; }
-        [Column("id_mesa", TypeName = "int(50)")]
-        public int IdMesa { get; set; }
+        [Column("estado")]
+        public EstadosPedido Estado { get; set; }
+        [Column("id_mesa")]
+        public long IdMesa { get; set; }
+        [Column("id_camarero")]
+        public long? IdCamarero { get; set; }
 
+        [ForeignKey("IdCamarero")]
+        [InverseProperty("Pedidos")]
+        public virtual Camarero? IdCamareroNavigation { get; set; }
         [ForeignKey("IdMesa")]
         [InverseProperty("Pedidos")]
         public virtual Mesa IdMesaNavigation { get; set; } = null!;
         [InverseProperty("IdPedidoNavigation")]
         public virtual ICollection<Comanda> Comanda { get; set; }
+        public enum EstadosPedido
+        {
+            Pendiente,
+            Pagado
+        }
     }
 }

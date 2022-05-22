@@ -12,7 +12,7 @@ public class ProductoService
     {
         _productoRepository = productoRepository;
     }
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -30,7 +30,7 @@ public class ProductoService
         return await _productoRepository.GetAll();
     }
 
-    public async Task<Producto?> FindById(int id)
+    public async Task<Producto?> FindById(long id)
     {
         return await _productoRepository.GetById(id);
     }

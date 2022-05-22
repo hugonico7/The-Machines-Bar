@@ -6,13 +6,15 @@ namespace ApiRest.Service;
 public class CamareroService
 {
     private readonly CamareroRepository _camareroRepository;
+    private readonly ComandaRepository _comandaRepository;
 
-    public CamareroService(CamareroRepository camareroRepository)
+    public CamareroService(CamareroRepository camareroRepository,ComandaRepository comanda)
     {
         _camareroRepository = camareroRepository;
+        _comandaRepository = comanda;
     }
 
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -32,7 +34,7 @@ public class CamareroService
         return await _camareroRepository.GetAll();
     }
 
-    public async Task<Camarero?> FindById(int id)
+    public async Task<Camarero?> FindById(long id)
     {
         return await _camareroRepository.GetById(id);
     }
@@ -47,5 +49,18 @@ public class CamareroService
     {
         Camarero camareroUp = await _camareroRepository.Update(camarero);
         return camareroUp;
+    }
+
+    public async Task<List<Comanda>> GetComandasActivas(long id)
+    {
+        var comandas = await _comandaRepository.GetComandasCamarero(id);
+
+        return comandas;
+    }
+
+    public async Task<List<Comanda>> GetBebidas(long id)
+    {
+        var comandas = await _comandaRepository.GetBebidasCamarero(id);
+        return comandas;
     }
 }

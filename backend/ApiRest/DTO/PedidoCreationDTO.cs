@@ -2,9 +2,9 @@
 
 public class PedidoCreationDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public DateTime? Fecha { get; set; }
     public decimal PrecioTotal { get; set; }
     public string? Estado { get; set; }
-    public int IdMesa { get; set; }
+    public long IdMesa { get; set; }
 }

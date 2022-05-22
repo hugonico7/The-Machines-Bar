@@ -20,7 +20,7 @@ public abstract class MasterRepoImpl<TEntity, Context> : IMasterRepository<TEnti
         return result.Entity;
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(long id)
     {
         var result = await _context.Set<TEntity>().FindAsync(id);
         if (result != null)
@@ -36,7 +36,7 @@ public abstract class MasterRepoImpl<TEntity, Context> : IMasterRepository<TEnti
         return await _context.Set<TEntity>().ToListAsync();
     }
 
-    public async Task<TEntity?> GetById(int id)
+    public async Task<TEntity?> GetById(long id)
     {
         return await _context.Set<TEntity>().FindAsync(id);
     }

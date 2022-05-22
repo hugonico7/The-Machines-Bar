@@ -31,7 +31,7 @@ public class ComandaController : Microsoft.AspNetCore.Mvc.Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero,cocinero")]
-    public async Task<ComandaDTO?> Get(int id)
+    public async Task<ComandaDTO?> Get(long id)
     {
         var comanda = await _comandaService.FindById(id); 
         return comanda is null ? null :  _mapper.Map<ComandaDTO>(comanda);
@@ -73,10 +73,24 @@ public class ComandaController : Microsoft.AspNetCore.Mvc.Controller
             return BadRequest(e.Message);
         }
     }
-            
+    [HttpPut]
+    [Route("Cocinero")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "cocinero,camarero")]
+    public async Task<IActionResult> AsignCocinero(ComandaCocineroDTO comanda)
+    {
+        try
+        {
+            await _comandaService.AsignCocinero(comanda.Id,comanda.IdCocinero);
+            return Ok("Asignado Correctamente!");
+        }catch(Exception e)
+        {
+            return BadRequest("No se ha podido asignar el Cocinero a la comanda");
+        }
+    }
+
     [HttpDelete("{id}")] 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _comandaService.DeleteById(id); 
         return deleted;

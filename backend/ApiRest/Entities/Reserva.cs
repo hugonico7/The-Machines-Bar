@@ -15,14 +15,14 @@ namespace ApiRest.Entities
         }
 
         [Key]
-        [Column("id", TypeName = "int(50)")]
-        public int Id { get; set; }
+        [Column("id")]
+        public long Id { get; set; }
         [Column("nombre_Cliente")]
         [StringLength(50)]
         public string NombreCliente { get; set; } = null!;
-        [Column("telefono", TypeName = "int(50)")]
+        [Column("telefono")]
         public int Telefono { get; set; }
-        [Column("cantidad_personas", TypeName = "int(50)")]
+        [Column("cantidad_personas")]
         public int CantidadPersonas { get; set; }
         [Column("hora_fecha", TypeName = "datetime")]
         public DateTime HoraFecha { get; set; }

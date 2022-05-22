@@ -33,15 +33,15 @@ public class PedidoController : Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
-    public async Task<PedidoDTO?> Get(int id)
+    public async Task<PedidoDTO?> Get(long id)
     {
         var pedido = await _pedidoService.FindById(id);
         return pedido is null ? null : _mapper.Map<PedidoDTO>(pedido);
     }
 
-    [HttpGet("/cuenta")]
+    [HttpGet("/{id}/cuenta")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "camarero")]
-    public async Task<PedidoDTO?> GetCuenta(int id)
+    public async Task<PedidoDTO?> GetCuenta(long id)
     {
         var pedido = await _pedidoService.FindById(id);
         foreach (var comanda in pedido.Comanda)
@@ -93,7 +93,7 @@ public class PedidoController : Controller
             
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _pedidoService.DeleteById(id); 
         return deleted;

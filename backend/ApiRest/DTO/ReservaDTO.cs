@@ -2,7 +2,7 @@
 
 public class ReservaDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string NombreCliente { get; set; } = null!;
     public int Telefono { get; set; }
     public int CantidadPersonas { get; set; }

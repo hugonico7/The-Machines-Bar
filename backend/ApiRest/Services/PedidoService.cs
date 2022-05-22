@@ -11,7 +11,7 @@ public class PedidoService
     {
         _pedidoRepository = pedidoRepository;
     }
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -29,7 +29,7 @@ public class PedidoService
         return await _pedidoRepository.GetAll();
     }
 
-    public async Task<Pedido?> FindById(int id)
+    public async Task<Pedido?> FindById(long id)
     {
         return await _pedidoRepository.GetById(id);
     }
@@ -44,5 +44,15 @@ public class PedidoService
     {
         var pedidoUp = await _pedidoRepository.Update(pedido);
         return pedidoUp;
+    }
+
+    public async Task<Pedido> GetPedidoByMesaAsync(long id)
+    {
+        return await _pedidoRepository.GetPedidoByMesaAsync(id);
+    }
+
+    public async Task<List<Pedido>> GetPedidoCamarero(long id)
+    {
+        return await _pedidoRepository.GetPedidoCamarero(id);
     }
 }

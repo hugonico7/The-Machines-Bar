@@ -2,7 +2,7 @@
 
 public class ComandaDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string? Descripcion { get; set; }
     public string? Estado { get; set; }
     public virtual CamareroCreationDTO IdCamareroNavigation { get; set; } = null!;

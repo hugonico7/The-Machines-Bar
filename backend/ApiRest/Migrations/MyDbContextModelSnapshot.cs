@@ -3,6 +3,7 @@ using System;
 using ApiRest.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -17,22 +18,25 @@ namespace ApiRest.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb4_general_ci")
+                .HasAnnotation("MySql:CharSet", "utf8mb4")
                 .HasAnnotation("ProductVersion", "6.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("ApiRest.Entities.Categoria", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombre");
 
                     b.HasKey("Id");
@@ -42,34 +46,36 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Comanda", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("descripcion");
 
-                    b.Property<string>("Estado")
-                        .HasColumnType("enum('Pendiente','En Preparación','Preparado','Entregado')")
+                    b.Property<int>("Estado")
+                        .HasColumnType("int")
                         .HasColumnName("estado");
 
-                    b.Property<int>("IdCamarero")
-                        .HasColumnType("int(50)")
+                    b.Property<long>("IdCamarero")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_camarero");
 
-                    b.Property<int?>("IdCocinero")
-                        .HasColumnType("int(50)")
+                    b.Property<long?>("IdCocinero")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_cocinero");
 
-                    b.Property<int>("IdPedido")
-                        .HasColumnType("int(50)")
+                    b.Property<long>("IdPedido")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_pedido");
 
-                    b.Property<int>("IdProducto")
-                        .HasColumnType("int(50)")
+                    b.Property<long>("IdProducto")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_producto");
 
                     b.HasKey("Id");
@@ -87,14 +93,15 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Mesa", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("enum('Libre','Reservada','Ocupada')")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int")
                         .HasColumnName("estado");
 
                     b.HasKey("Id");
@@ -104,21 +111,27 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Pedido", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("Estado")
-                        .HasColumnType("enum('Pagado','Pendiente')")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int")
                         .HasColumnName("estado");
 
                     b.Property<DateTime?>("Fecha")
                         .HasColumnType("datetime")
                         .HasColumnName("fecha");
 
-                    b.Property<int>("IdMesa")
-                        .HasColumnType("int(50)")
+                    b.Property<long?>("IdCamarero")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_camarero");
+
+                    b.Property<long>("IdMesa")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_mesa");
 
                     b.Property<decimal>("PrecioTotal")
@@ -128,6 +141,8 @@ namespace ApiRest.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCamarero");
+
                     b.HasIndex(new[] { "IdMesa" }, "fk_idmesa");
 
                     b.ToTable("Pedido", (string)null);
@@ -135,24 +150,26 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Producto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<int>("IdCat")
-                        .HasColumnType("int(50)")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("IdCat")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_cat");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombre");
 
                     b.Property<decimal>("Precio")
-                        .HasPrecision(2, 2)
-                        .HasColumnType("decimal(2,2)")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("decimal(4,2)")
                         .HasColumnName("precio");
 
                     b.HasKey("Id");
@@ -164,13 +181,15 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Reserva", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
                     b.Property<int>("CantidadPersonas")
-                        .HasColumnType("int(50)")
+                        .HasColumnType("int")
                         .HasColumnName("cantidad_personas");
 
                     b.Property<DateTime>("HoraFecha")
@@ -180,11 +199,11 @@ namespace ApiRest.Migrations
                     b.Property<string>("NombreCliente")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombre_Cliente");
 
                     b.Property<int>("Telefono")
-                        .HasColumnType("int(50)")
+                        .HasColumnType("int")
                         .HasColumnName("telefono");
 
                     b.HasKey("Id");
@@ -194,42 +213,44 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Usuario", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(50)")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Apellidos")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("apellidos");
 
                     b.Property<string>("Nombre")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombre");
 
                     b.Property<string>("Nss")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("NSS");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("password");
 
                     b.Property<string>("Rol")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("rol");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("username");
 
                     b.HasKey("Id");
@@ -244,11 +265,11 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("MesaReserva", b =>
                 {
-                    b.Property<int>("IdMesa")
-                        .HasColumnType("int(50)");
+                    b.Property<long>("IdMesa")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("IdReserva")
-                        .HasColumnType("int(50)");
+                    b.Property<long>("IdReserva")
+                        .HasColumnType("bigint");
 
                     b.HasKey("IdMesa", "IdReserva");
 
@@ -313,11 +334,17 @@ namespace ApiRest.Migrations
 
             modelBuilder.Entity("ApiRest.Entities.Pedido", b =>
                 {
+                    b.HasOne("ApiRest.Entities.Camarero", "IdCamareroNavigation")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("IdCamarero");
+
                     b.HasOne("ApiRest.Entities.Mesa", "IdMesaNavigation")
                         .WithMany("Pedidos")
                         .HasForeignKey("IdMesa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("IdCamareroNavigation");
 
                     b.Navigation("IdMesaNavigation");
                 });
@@ -353,7 +380,7 @@ namespace ApiRest.Migrations
                     b.HasOne("ApiRest.Entities.Usuario", null)
                         .WithOne()
                         .HasForeignKey("ApiRest.Entities.Camarero", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -362,7 +389,7 @@ namespace ApiRest.Migrations
                     b.HasOne("ApiRest.Entities.Usuario", null)
                         .WithOne()
                         .HasForeignKey("ApiRest.Entities.Cocinero", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -371,7 +398,7 @@ namespace ApiRest.Migrations
                     b.HasOne("ApiRest.Entities.Usuario", null)
                         .WithOne()
                         .HasForeignKey("ApiRest.Entities.Gerente", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -398,6 +425,8 @@ namespace ApiRest.Migrations
             modelBuilder.Entity("ApiRest.Entities.Camarero", b =>
                 {
                     b.Navigation("Comanda");
+
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("ApiRest.Entities.Cocinero", b =>

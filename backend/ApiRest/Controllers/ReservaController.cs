@@ -31,7 +31,7 @@ public class ReservaController : Microsoft.AspNetCore.Mvc.Controller
     
     [HttpGet("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
-    public async Task<ReservaDTO?> Get(int id)
+    public async Task<ReservaDTO?> Get(long id)
     {
         var reserva = await _reservaService.FindById(id); 
         return reserva is null ? null : (ReservaDTO) _mapper.Map<ReservaDTO>(reserva);
@@ -76,7 +76,7 @@ public class ReservaController : Microsoft.AspNetCore.Mvc.Controller
             
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "gerente,camarero")]
-    public async Task<bool> Delete(int id) 
+    public async Task<bool> Delete(long id) 
     { 
         var deleted = await _reservaService.DeleteById(id); 
         return deleted;

@@ -12,7 +12,7 @@ public class CategoriaService
         _categoriaRepository = categoriaRepository;
     }
     
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(long id)
     {
         try
         {
@@ -32,7 +32,7 @@ public class CategoriaService
         return await _categoriaRepository.GetAll();
     }
 
-    public async Task<Categoria?> FindById(int id)
+    public async Task<Categoria?> FindById(long id)
     {
         return await _categoriaRepository.GetById(id);
     }
