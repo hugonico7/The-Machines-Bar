@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'restaurante-maquinarias'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F59BE256BD8F407D8B30A5BAA56CF038 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_11A9B60B632E44838CC92A1A8F563891 }}
           package: .
